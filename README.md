@@ -62,9 +62,15 @@ treated conservatively as `NEEDS_HELP` and flagged for human review.
 
 | Layer       | Choice                                                        |
 |-------------|---------------------------------------------------------------|
-| Telephony   | [Dial](https://docs.getdial.ai) — outbound AI voice + SMS     |
+| Telephony   | [Dial](https://docs.getdial.ai) — outbound/inbound AI voice, SMS, webhooks (the core runtime) |
+| Payments    | [Stripe](https://stripe.com) — readiness + usage billing ("who pays") and SMS-delivered emergency micro-grants |
 | Backend     | Python 3.12 · FastAPI · SQLite (hackathon-grade, no auth)     |
 | Dashboard   | Single-file HTML + Leaflet, polls status every 2s             |
+
+**Dial is the spine** (outbound triage calls, escalation calls, inbound + outbound
+SMS, inbound calls, event webhooks) and **Stripe rides on the phone layer** —
+relief money moves over SMS in the first hour, which a screen-based app can't do
+for people with no smartphone, data, or power. See [`docs/stack.md`](docs/stack.md).
 
 ---
 

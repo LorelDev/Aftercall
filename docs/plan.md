@@ -4,6 +4,15 @@
 a dot turns green on a live map.** Everything past that is polish. Build the
 spine end-to-end first; do not gold-plate any single piece.
 
+**Judging-aware priorities** (see `docs/stack.md` for the full mapping):
+- **Dial depth (criterion 2):** use Dial across multiple primitives — outbound
+  triage calls, escalation calls, inbound + outbound SMS, inbound calls, event
+  webhooks. The phone layer must be the spine, never a single API call.
+- **Who pays (criterion 1):** Stripe makes the business model *live* — metered
+  usage per person reached + a visible invoice/Checkout.
+- **Phone-native (criterion 3):** Stripe emergency micro-grants delivered and
+  confirmed **over SMS** — money moving at the speed of the phone.
+
 ## Roles
 
 - **A — Telephony/Dial:** dispatcher + real Dial integration + webhook field
@@ -12,6 +21,8 @@ spine end-to-end first; do not gold-plate any single piece.
 - **C — Frontend/Demo:** Leaflet dashboard, playbooks, demo script + narration.
 
 Roles are a default, not a wall — whoever is unblocked grabs the next item.
+**Stripe (Layers A/B)** is owned by whoever finishes their spine work first —
+it's additive, not on the critical path to the green-dot milestone.
 
 ## Hour-0 checklist (do before writing features)
 
@@ -22,6 +33,8 @@ Roles are a default, not a wall — whoever is unblocked grabs the next item.
       field names (`type` / `answered` / `transcript` / `metadata.person_id` are
       currently guesses).
 - [ ] Collect ~30 real demo phone numbers (team + volunteers), opted in.
+- [ ] Create a Stripe **test-mode** account; grab `sk_test_...`; note the test
+      card `4242 4242 4242 4242` for the live demo disbursement/Checkout.
 
 ## Priority order (frozen)
 
@@ -35,6 +48,12 @@ Roles are a default, not a wall — whoever is unblocked grabs the next item.
 4. **Escalation** — DISTRESS → call emergency contact + alert operator; retry
    UNREACHED (max 2, 10-min delay); SMS fallback.
 5. **Integration milestone** — ONE real call flows all the way to a green dot.
+6. **Stripe Layer A (who pays)** — record one metered usage unit per person
+   reached; show a Checkout/invoice so the business model is real on stage.
+7. **Stripe Layer B (phone-native)** — ONE end-to-end micro-grant: NEEDS_HELP →
+   Dial SMS Payment Link → reply YES → test-mode disbursement → shown on map.
+8. **Stripe Layer C (optional)** — live donation surge that converts to call
+   capacity; closer only, cut first if time is short.
 
 ## Hour-by-hour (rough)
 
@@ -45,9 +64,10 @@ Roles are a default, not a wall — whoever is unblocked grabs the next item.
 | 3–5  | First real call end-to-end; webhook → `classify_call` → DB → dot updates. |
 | 5–7  | Parallel fan-out under the concurrency cap; counters live; tune polling. |
 | 7–9  | Escalation path (DISTRESS contact call + operator alert); retry + SMS fallback. |
+| 8–10 | Stripe Layer A (metered usage + invoice/Checkout) and Layer B (one SMS micro-grant, test mode). |
 | 9–10 | Second playbook (earthquake) to prove crisis-agnosticism on stage. |
 | 10–11| Iterate the Hebrew prompt on real people; calm/short/no-drama. |
-| 11–12| Freeze. Rehearse the demo script twice. Pre-stage the polygon + numbers. |
+| 11–12| Freeze. Rehearse the demo script twice. Pre-stage polygon + numbers + Stripe test data. |
 
 ## Architecture recap
 
@@ -97,13 +117,17 @@ call_results(id, event_id, person_id, status, attempt, transcript_summary, updat
 2. **Draw the polygon (15s):** select a Tel Aviv neighborhood on the map.
 3. **Trigger (10s):** fire `rocket_alert`; calls go out to ~30 real phones in the
    room.
-4. **Watch it fill in (60s):** dots flip green/yellow as people answer; counters
+4. **Watch it fill in (45s):** dots flip green/yellow as people answer; counters
    climb. Plant one volunteer who reports distress → red dot → emergency contact
    gets a call live.
-5. **Crisis-agnostic (20s):** swap to `earthquake.yaml` — "Tokyo, same engine,
+5. **Close the loop with money (30s):** a planted NEEDS_HELP resident gets an SMS
+   Payment Link / grant code, replies YES, and the dashboard shows the relief
+   pool drop + "₪200 disbursed" — money over the phone, first hour. Meanwhile the
+   usage meter shows the authority's invoice ticking up → "obvious who pays."
+6. **Crisis-agnostic (20s):** swap to `earthquake.yaml` — "Tokyo, same engine,
    zero code."
-6. **Close (15s):** opt-in + human-in-the-loop = trust; this is the first hour,
-   at infinite scale.
+7. **Close (15s):** opt-in + human-in-the-loop = trust; Dial moves the voice,
+   Stripe moves the money — the first hour, at infinite scale.
 
 ## Known pitfalls
 
@@ -118,4 +142,8 @@ call_results(id, event_id, person_id, status, attempt, transcript_summary, updat
   pitch.
 - **Pre-stage everything** — polygon coordinates, playbook, seeded numbers — so
   the live run is one click.
+- **Stripe stays in test mode** — use `sk_test_...` keys and Stripe's test cards;
+  never commit a real key (`.env` only, `.env.example` with placeholders).
+- **Don't let Stripe block the spine** — Layers A/B are additive. If the
+  Dial green-dot milestone isn't solid, fix that before touching payments.
 ```

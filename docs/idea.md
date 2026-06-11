@@ -69,12 +69,35 @@ turn green / yellow / red / grey as answers come back, with running counters
 above. The demo lives or dies on this screen — it is the entire pitch in one
 glance: *the first hour, visualized, at scale.*
 
+## Who pays — and closing the loop (Stripe)
+
+Triage isn't the end. The most acute cases need a **resource that costs money in
+the first hour** — a ride to a shelter, a hotel night, a medication refill, a
+generator, water. Aftercall closes the loop:
+
+- **Who pays:** authorities, Home Front Command, campuses, and NGOs pay a
+  **readiness subscription** (Stripe Billing) plus **usage per person reached**
+  (Stripe metered billing). Triggering a run visibly accrues an invoice — the
+  "obvious who pays" is live on stage, not a slide.
+- **Emergency micro-grants over SMS:** the authority/NGO pre-funds a relief pool
+  in Stripe; after triage, an eligible `NEEDS_HELP` case is offered a
+  **pre-authorized, capped micro-grant** — a Stripe Payment Link or single-use
+  virtual card — delivered **over SMS** and confirmed by reply. Humans set the
+  policy; the agent only executes inside the guardrails.
+
+This is still the iron rule: the agent **connects people to resources**, it never
+treats. Money is a form of connection — and moving it over the phone in the first
+hour is something a screen-based app can't do for people with no smartphone, no
+data, or no power. Full detail in [stack.md](./stack.md).
+
 ## Pitch framing
 
 - **Trust:** opt-in only; a human owns every red case.
 - **Scale:** thousands of parallel calls vs. a phone tree.
 - **Global:** same engine, different playbook — a new disaster is a new YAML
   file, not a new project.
+- **Phone-native money:** relief moves over SMS/voice in the first hour —
+  impossible on a screen alone (see [stack.md](./stack.md)).
 
 ## Context
 
