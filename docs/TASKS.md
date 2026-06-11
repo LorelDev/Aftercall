@@ -13,8 +13,9 @@ other's running code:
 
 - `POST /events` body `{playbook, polygon}` → `{event_id}`
 - `GET /events/{event_id}/status` → counters + dots `[{person_id, name, lat, lng, status}]`
-- `POST /webhooks/dial` ← Dial events
+- `POST /webhooks/dial` ← Dial events (`call.ended`, `message.received` — see `docs/DIAL.md`)
 - Status protocol: agent ends every call with `STATUS=<OK|NEEDS_HELP|DISTRESS> | SUMMARY=<one line>`
+- **Verified Dial API + corrected webhook field names live in `docs/DIAL.md` — read it first.**
 
 Commit a `fixtures/` folder up front (5 min, anyone): a sample `status.json`
 response, a sample Dial `call.ended` webhook body, and ~30 seed people as JSON.
@@ -49,8 +50,10 @@ local stub, never to Task 2's real database.
 - [ ] Parallel fan-out with `asyncio.Semaphore(MAX_CONCURRENT_CALLS)`.
 - [ ] `build_system_prompt()` — per-person Hebrew prompt; drill the exact
       `STATUS=… | SUMMARY=…` line until reliable.
-- [ ] Verify webhook field names and **write the real `call.ended` body into
-      `fixtures/webhook_call_ended.json`** — this unblocks Task 2 without coupling.
+- [ ] **Store `callId → person_id` at call-placement time** — the webhook has no
+      `metadata`, so this map is the only way to correlate (see `docs/DIAL.md`).
+- [ ] Write the real `call.ended` body into `fixtures/webhook_call_ended.json`
+      (shape verified in `docs/DIAL.md`) — unblocks Task 2 without coupling.
 - [ ] Escalation call, outbound + inbound SMS, inbound voice callback.
 - **Test in isolation:** feed `dispatcher` a `people.json` fixture list and place
   calls to the team's own phones; log results to stdout (no DB needed).
@@ -65,8 +68,12 @@ real call ever has to happen to build or test this.
 - [ ] `models.py`: `init_db`, seed ~30 demo people from `fixtures/people.json`,
       **point-in-polygon** query, save/aggregate results.
 - [ ] `POST /events` + `GET /events/{id}/status` — serve the frozen contract.
-- [ ] `triage.classify_call()`: regex the STATUS line; unparsable-but-answered →
-      conservative `NEEDS_HELP` + review flag; no answer → `UNREACHED`.
+- [ ] `triage.classify_call()` is **two steps**: on `call.ended`, fetch the
+      transcript via `GET /api/v1/calls/{id}`, then regex the STATUS line;
+      unparsable-but-answered → conservative `NEEDS_HELP` + review flag;
+      `status != completed` / `canceled` → `UNREACHED` (see `docs/DIAL.md`).
+- [ ] Inbound SMS handler keys off `message.received` + `data.body`
+      (`1`=OK, `2`=NEEDS_HELP).
 - [ ] `handle_status` machine: DISTRESS → call a `notify()` hook (Task 1 swaps in
       the real escalation call later); UNREACHED → retry (max 2, 10-min) → SMS hook.
 - **Test in isolation:** `POST /webhooks/dial` with

@@ -53,8 +53,9 @@ Dial is the spine. Aim to exercise all five; the first three are MUST.
 
 - [ ] **MUST** Outbound voice (triage) — parallel calls; each ends with the
       machine-readable `STATUS=… | SUMMARY=…` line.
-- [ ] **MUST** Event webhooks — `call.ended`, `sms.received`, delivery/status
-      events drive the state machine (`POST /webhooks/dial`).
+- [ ] **MUST** Event webhooks — `call.ended`, `message.received`,
+      `call.transcript.ready` drive the state machine (`POST /webhooks/dial`).
+      **Verified payloads + field names: `docs/DIAL.md` (the plan's guesses were wrong).**
 - [ ] **MUST** Outbound + inbound SMS — UNREACHED fallback ("reply 1 = OK, 2 =
       help"); inbound replies drive triage.
 - [ ] **SHOULD** Outbound voice (escalation) — DISTRESS → automatic call to the
@@ -83,6 +84,10 @@ Stripe is floating work (after the green dot), but to win Axis 1 it must be live
       set policy; the agent only executes inside guardrails).
 
 ---
+
+> Dial reality (see `docs/DIAL.md`): the `call.ended` webhook carries **no inline
+> transcript and no metadata** — fetch the transcript via `GET /api/v1/calls/{id}`
+> and correlate by a stored `callId → person_id` map.
 
 ## 5. Frozen API contract (do not change)
 
