@@ -10,8 +10,10 @@ Today that answer is assembled by hand: volunteers, phone trees, spreadsheets.
 It does not scale, and the first hour is the hour that counts.
 
 **Aftercall** launches thousands of *parallel outbound AI voice calls* to an
-opted-in population inside a geographic polygon, triages every answer, escalates
-real distress to humans, and renders a live operations map for the authority.
+opted-in population inside a geographic polygon. Each call reaches the person as
+calm **emotional support** — and that conversation is how Aftercall **gathers the
+data**: every answer becomes a status, aggregated into a live operations map for
+the authority. Real distress is escalated to a human.
 
 > Built in 12 hours at the Dial *"My Agent Has a Phone"* hackathon — Tel Aviv,
 > June 2026.
@@ -20,12 +22,13 @@ real distress to humans, and renders a live operations map for the authority.
 
 ## Iron rule
 
-**The agent NEVER treats anyone. It triages and connects.**
+**The agent comforts and gathers data — it never clinically treats anyone.**
 
-Every red case reaches a human: the emergency contact is called and a human
-operator is alerted. The engine is **crisis-agnostic** — everything
-crisis-specific lives in YAML playbooks. A Tokyo earthquake is a new playbook,
-not new code.
+The conversation offers genuine emotional support, but the agent never diagnoses
+or advises treatment. Every red case reaches a human: the operator is alerted and
+escalates with **one click** to call the emergency contact / dispatch help. The
+engine is **crisis-agnostic** — everything crisis-specific lives in YAML
+playbooks. A Tokyo earthquake is a new playbook, not new code.
 
 This is not a safety footnote, it is the product: **opt-in only**, and
 **human-in-the-loop escalation is a feature**.
@@ -42,7 +45,7 @@ Trigger (POST /events {playbook, polygon})
       call.ended → triage.classify_call → save result → escalate if needed
       sms.received → "1" = OK, "2" = NEEDS_HELP
   → statuses:  OK 🟢  |  NEEDS_HELP 🟡  |  DISTRESS 🔴  |  UNREACHED ⚫
-      DISTRESS  → call emergency contact + alert human operator
+      DISTRESS  → alert operator → one-click escalation (emergency contact / dispatch help)
       UNREACHED → retry after 10 min (max 2) → SMS fallback
   → dashboard polls aggregate status → colored dots on a live map
 ```
@@ -119,7 +122,8 @@ dashboard/index.html          Leaflet map + polling
 
 ## Ethics
 
-Aftercall calls only people who have **opted in**. It never diagnoses, never
-advises treatment, and never closes a red case automatically. Transcripts are
-stored as one-line summaries only. The whole point of the system is to get a
-human to the people who need one, faster.
+Aftercall calls only people who have **opted in**. The agent offers emotional
+support but never diagnoses, never advises treatment, and never closes a red case
+automatically. Transcripts are stored as one-line summaries only. The whole point
+of the system is to reach everyone with a caring voice and turn those
+conversations into the data that gets a human to the people who need one, faster.

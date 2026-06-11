@@ -24,12 +24,15 @@ improvised at the buzzer. Sources: getdial.ai/hackathon + docs.getdial.ai.
   outbound triage voice, escalation voice, inbound + outbound SMS, inbound
   calls, webhooks. The Semaphore fan-out + UNREACHED retry + SMS fallback *is*
   the latency/failure-mode story. Risk to avoid: "Dial easily substituted" —
-  emphasize the AI voice agent conducting the conversation from a system prompt
-  and inbound SMS reply/OTP capture, not a dumb dialer.
+  emphasize the AI voice agent conducting a genuine **emotional-support
+  conversation** that doubles as the data-collection instrument, plus inbound SMS
+  reply/OTP capture — not a dumb dialer.
 - **Criterion 3 (phone-native) — also very strong.** The test is "compelling
   without voice/SMS?" Aftercall reaches people with *no smartphone, no data, no
-  power* — a screen app reaches zero of them in a blackout. Micro-grant over SMS
-  doubles down.
+  power* — a screen app reaches zero of them in a blackout. And the phone-native
+  magic is **emotional support at population scale**: a calm, human-like voice
+  reaching thousands at once and turning each conversation into situational data
+  no web form could collect.
 - **Criterion 1 (impact / who pays) — thinnest on the exact rubric.** 30 real
   phones answering = the engagement half. Stripe readiness subscription +
   metered usage invoice ticking live = the revenue half. Risk: disaster response
@@ -61,9 +64,9 @@ YAML. Keep them distinct in the pitch.
 - **Project description ≤ 280 chars** (draft below).
 - Team LinkedIn URLs (one per member), one contact email.
 
-### 280-char description (draft — 279 chars, fits)
+### 280-char description (draft — 274 chars, fits)
 
-> Aftercall fires thousands of parallel AI voice calls to an opted-in population
-> in a map polygon, triages every answer (OK / needs help / distress), escalates
-> red cases to a human, and moves Stripe relief grants over SMS. The first hour
-> after any crisis, at scale — built on Dial.
+> Aftercall phones thousands of opted-in people in a crisis polygon. A calm AI
+> voice gives emotional support and turns each conversation into live situational
+> data - OK, needs help, or distress - escalating red cases to a human. The first
+> hour after any crisis. Built on Dial.

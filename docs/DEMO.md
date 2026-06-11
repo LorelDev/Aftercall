@@ -12,18 +12,18 @@ is invisible.
 1. **The cascade** — operator draws a polygon over south Tel Aviv, hits *Fire*,
    and **hundreds of grey dots cascade to green** with counters spinning up.
    "The first hour, at scale," visible in 3 seconds.
-2. **The red call** — one dot turns 🔴, operator clicks it, and **a real phone on
-   the table rings** (the emergency-contact escalation call, live). "The agent
-   never treats — it connects a human," made physical.
+2. **The red call** — one dot turns 🔴, operator taps the one-click escalation, and
+   **a real phone on the table rings** (the emergency-contact call, live). "The
+   agent comforts but never treats — one tap and a human is on the way," made physical.
 
 ## 90-second script (hard cap 1:30)
 
 | Time | On screen | Spoken (narrator) | Why-it's-good baked in |
 |---|---|---|---|
 | 0:00–0:08 HOOK | Map of Tel Aviv, polygon already drawn, finger on **Fire** | "Rocket alert. Ten thousand people in this zone. Who's OK and who isn't? Today that takes hours of phone trees. **Watch.**" | Problem + stakes in 8 sec. "Watch" promises a payoff. |
-| 0:08–0:22 THE WOW | Hits Fire → hundreds of grey dots cascade to green, counters spinning, scatter of 🟡 | "Thousands of parallel AI voice calls. The entire zone, triaged, in seconds — not hours." | Scale, made visible. The cascade IS the payoff. |
-| 0:22–0:34 IT'S REAL | A phone in the room **rings**; 3-sec Hebrew AI line on speaker; that dot flips green | "That's not a simulation — that's a live Dial call, right now." | Anchors the whole wall as real (Dial depth). |
-| 0:34–0:58 THE RED CALL | A dot turns 🔴; operator clicks → alert banner; a **second phone rings on the table** | "One person is in distress. Aftercall never treats them — it does one thing: get a human there. It's calling their emergency contact, live." | Human-in-the-loop, made physical. Let the phone ring out loud. |
+| 0:08–0:22 THE WOW | Hits Fire → hundreds of grey dots cascade to green, counters spinning, scatter of 🟡 | "Thousands of AI voice calls offering calm support — and turning every conversation into live situational data. The whole zone, in seconds, not hours." | Scale + data-through-support, made visible. The cascade IS the payoff. |
+| 0:22–0:34 IT'S REAL | A phone in the room **rings**; 3-sec Hebrew AI line on speaker; that dot flips green | "That's not a simulation — a real Dial call, a real conversation, right now." | Anchors the whole wall as real (Dial depth). |
+| 0:34–0:58 THE RED CALL | A dot turns 🔴; operator taps the **escalation button** → alert banner; a **second phone rings on the table** | "One person is in distress. Aftercall comforts them, flags it red, and hands the operator one-click escalation. One tap — and a human is on the way." | Human-in-the-loop, made physical. Let the phone ring out loud. |
 | 0:58–1:12 WHY IT WINS | Quick flash: `earthquake.yaml`, map blinks to Tokyo | "No smartphone, no data, no power — a screen app reaches zero of these people. A phone reaches all of them. New crisis? New YAML, zero code." | Phone-native + crisis-agnostic in one breath. |
 | 1:12–1:30 CLOSE | Back to the live map, mostly green | "The first hour after any crisis — who's OK, who's not, who's already getting help. At infinite scale. Built on Dial." | Tagline lands on the wall. Silence. |
 
@@ -35,11 +35,12 @@ draw (pre-drawn), and the full crisis-agnostic swap (now a 4-sec Tokyo flash).
 - B: "In a disaster, the first hour is the only hour. Here's that hour, at the scale of a whole city."
 - C: "Ten thousand people just lost power and signal. Watch us reach every one of them."
 
-## 60-second video (trim of the above)
+## 60-second submission video
 
-Same backbone minus the Tokyo flash and a tighter red-call beat. Captioned, hard
-cuts, reads on mute — captions carry every Dial primitive. Record during the
-freeze hour, not at the buzzer.
+The full shot-list for the ≤60s submission video lives in
+[`../demo.md`](../demo.md) — same backbone, captioned, reads on mute. (This file
+is the **stage script**; `demo.md` is the **video**.) Record during the freeze
+hour, not at the buzzer.
 
 ## Staging checklist
 

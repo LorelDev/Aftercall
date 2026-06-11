@@ -1,7 +1,7 @@
 # Aftercall — Submission Video (≤60s)
 
-The **submission video** is a *separate artifact* from the 3-min stage demo (see
-[`docs/DEMO.md`](docs/DEMO.md)). It's a tight, captioned, hard-cut screen capture
+The **submission video** is a *separate artifact* from the 90-second stage script
+(see [`docs/DEMO.md`](docs/DEMO.md)). It's a tight, captioned, hard-cut screen capture
 that **reads on mute** — captions carry every Dial primitive so judges scoring
 without sound still see the depth. Record during the freeze hour, not at the
 buzzer.
@@ -23,10 +23,10 @@ the inbound failure, then flips the arrow. That arrow-flip is the wow.
 | 0:05–0:10 | Pull back to scale: jammed-switchboard / "all circuits busy". Screen-app icons grey out. | *"You. And 10,000 others. All calling the same number. No power. No data. Just a phone."* | **Agitate** — it's not one person, it's a city. |
 | 0:10–0:13 | Hard cut to black. | *"What if help didn't wait for the call?"* | **The turn.** |
 | 0:13–0:18 | Dashboard. One click. Counter: **"Placing 10,000 calls…"** Map floods; phones ring **outbound** at once. Real Hebrew Dial audio answering. | *"Aftercall flips the arrow. It calls everyone — in parallel."* | **Solution** — outbound at scale. |
-| 0:18–0:30 | Dots cascade 🟢🟡. One flips 🔴 → banner. | *"Every answer triaged: OK · needs help · distress. Live."* | Triage map filling (webhooks → dots). |
-| 0:30–0:42 | Click the 🔴 dot → escalation call placed; second phone rings. | *"The agent never treats. Distress → a human + the emergency contact, called instantly."* | Human-in-the-loop, made physical. |
-| 0:42–0:52 | Phone shows an inbound **SMS** with a Stripe link; "Grant sent ✓". | *"Relief money moves over SMS — no app, no smartphone needed."* | Money over the phone layer (who pays). |
-| 0:52–0:60 | Back to the live map, mostly green. Live billing counter ticking. | *"The first hour after any crisis — at infinite scale. Built on Dial."* | Tagline + revenue, lands on the wall. |
+| 0:18–0:30 | Dots cascade 🟢🟡. One flips 🔴 → banner. | *"Every supportive call becomes live data: OK · needs help · distress."* | Data-through-support map filling (webhooks → dots). |
+| 0:30–0:42 | Tap the 🔴 dot → one-click escalation; second phone rings. | *"The agent comforts, never treats. Distress → one tap, a human + the emergency contact, called instantly."* | Human-in-the-loop, made physical. |
+| 0:42–0:52 | Hold on the red case: the second phone rings out loud, a human answers, operator marks it owned. | *"Distress never waits — a human is already on the line."* | Escalation breathes; human-in-the-loop lands. |
+| 0:52–0:60 | Back to the live map, mostly green. | *"The first hour after any crisis — at infinite scale. Built on Dial."* | Tagline lands on the wall. |
 
 ## Must-have vs. cut-if-short
 

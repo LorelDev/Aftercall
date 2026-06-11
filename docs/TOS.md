@@ -14,10 +14,13 @@ if it "works." Treat each `MUST` / `NEVER` as a gate.
 
 ## 1. The iron rule (product core, not a footnote)
 
-- **NEVER** let the agent diagnose, advise treatment, or otherwise *treat* anyone.
-  The agent **triages and connects only**.
-- **MUST** route every 🔴 DISTRESS case to a human: call the emergency contact
-  **and** alert a human operator.
+- **MAY** let the agent offer **emotional support and reassurance** — that is the
+  vehicle that gets people to answer and open up, and the conversation Aftercall
+  mines for data.
+- **NEVER** let the agent **diagnose, advise treatment, or act as a clinician**.
+  It comforts and gathers data; the clinical help is always a human.
+- **MUST** route every 🔴 DISTRESS case to a human: the operator is alerted and
+  escalates with **one click** (emergency contact called / help dispatched).
 - **NEVER** auto-close a red case. A human closes red.
 - Money is a form of connection, not treatment: micro-grants connect people to
   resources, they do not "fix" anyone.

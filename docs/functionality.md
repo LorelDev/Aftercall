@@ -1,14 +1,17 @@
 # Aftercall — Functionality Spec
 
-> **One-line pitch:** Aftercall is an AI-powered crisis recovery platform that
-> provides immediate citizen support and real-time situational awareness for
-> communities after emergencies.
+> **One-line pitch:** Aftercall is an AI that gathers real-time situational data
+> after a crisis at population scale — reaching each person as a calm, caring voice
+> and turning every supportive conversation into live awareness for the authority.
 
 **What it does, in one breath:** after any disaster, Aftercall fires thousands of
-*parallel outbound AI voice calls* to an opted-in population inside a map polygon,
-triages every answer (OK / needs help / distress), escalates real distress to a
-human, moves emergency relief money over SMS, and renders a live operations map
-for the authority — **the first hour after any crisis, at infinite scale.**
+*parallel outbound AI voice calls* to an opted-in population inside a map polygon.
+Each call reaches the person as **emotional support** — a calm voice that asks how
+they are and reassures them — and that very conversation is the instrument that
+**collects the data**: every answer becomes a status (OK / needs help / distress)
+plus a one-line summary, aggregated into a live operations map for the authority.
+The support is what gets people to answer and open up; the gathered data is what
+saves the response — **the first hour after any crisis, at infinite scale.**
 
 This file is the functional source of truth: *what the system does* and *why*.
 For the verified telephony API see [`DIAL.md`](DIAL.md); for hard rules see
@@ -28,11 +31,12 @@ These are not safety footnotes — they are the product.
    local DB and is shared with no third party beyond what Dial/Stripe need to
    deliver the service.
 3. **Human-in-the-loop escalation.** Every 🔴 distress case reaches a human: the
-   emergency contact is called *and* a human operator is alerted. Red cases are
-   never auto-closed.
-4. **AI does not replace professionals.** The agent **triages and connects** — it
-   never diagnoses, never advises treatment, never acts as a clinician or first
-   responder. It is the fastest possible switchboard, not the help itself.
+   operator is alerted and escalates with **one click** — calling the emergency
+   contact / dispatching help. Red cases are never auto-closed; a human owns them.
+4. **AI does not replace professionals.** The agent offers **emotional support and
+   reassurance**, but it never diagnoses, never advises treatment, and never acts
+   as a clinician or first responder. It comforts and gathers data, then connects a
+   human — it is not the clinical help itself.
 5. **Full transparency.** The ops map, live counters, the machine-readable status
    protocol, the metered-usage invoice, and the audited disbursement log mean
    every action the system takes is visible and accountable.
@@ -46,7 +50,7 @@ These are not safety footnotes — they are the product.
 | **Authority / NGO operator** | triggers an event, watches the ops map, takes over red cases. Pays the readiness subscription + metered usage. |
 | **Resident (opted-in citizen)** | receives the AI voice call / SMS, answers status, may receive a relief micro-grant. |
 | **Emergency contact** | a resident's pre-listed contact, auto-called when that resident is in distress. |
-| **AI voice agent (Dial)** | conducts each call from a per-person system prompt; ends with the status line. Never treats. |
+| **AI voice agent (Dial)** | conducts each call as a calm, supportive conversation from a per-person system prompt; gathers the person's status and ends with the status line. Offers comfort, never clinical treatment. |
 | **Human responder** | the person the operator dispatches once a red case is surfaced. |
 
 ---
@@ -63,7 +67,7 @@ Operator triggers an event (playbook + map polygon)
       message.received   → inbound SMS reply drives status ("1"=OK, "2"=NEEDS_HELP) / grant confirm
   → each resident lands in one status:
       OK 🟢   |   NEEDS_HELP 🟡   |   DISTRESS 🔴   |   UNREACHED ⚫
-      DISTRESS  → call emergency contact + alert human operator
+      DISTRESS  → alert operator → one-click escalation (emergency contact / dispatch help)
       NEEDS_HELP→ (eligible) offer relief micro-grant over SMS
       UNREACHED → retry after 10 min (max 2) → SMS fallback
   → live dashboard polls aggregate status every 2s → colored dots + counters on a map
@@ -82,10 +86,12 @@ Operator triggers an event (playbook + map polygon)
   thresholds) lives in a **YAML playbook**. A new crisis = a new playbook, *zero
   code* (`rocket_alert.yaml`, `earthquake.yaml` ship to prove this).
 
-### 4.2 Outbound AI voice triage (the core)
+### 4.2 Outbound AI support call — the conversation that gathers the data (the core)
 - For each target, build a **per-person Hebrew system prompt** (name, context,
-  calm/short/no-drama tone) and place a Dial AI voice call.
-- The AI agent holds a real conversation and ends every call with the exact
+  calm/short/no-drama tone) and place a Dial AI voice call that opens as
+  **emotional support** — checking in, reassuring, listening.
+- The agent holds a genuine supportive conversation and, from what the person
+  says, derives their situation — ending every call with the exact
   machine-readable line:
   ```
   STATUS=<OK|NEEDS_HELP|DISTRESS> | SUMMARY=<one line>
@@ -110,9 +116,10 @@ Operator triggers an event (playbook + map polygon)
 | `UNREACHED ⚫` | no contact | retry ×2 (10-min) → SMS fallback |
 
 ### 4.5 Human-in-the-loop escalation
-- `DISTRESS` triggers two things automatically: an **outbound Dial voice call to
-  the resident's emergency contact** with a short Hebrew brief, and an **operator
-  alert** on the dashboard.
+- `DISTRESS` raises an **operator alert** on the dashboard with a **one-click
+  action** to escalate: place the outbound Dial voice call to the resident's
+  emergency contact (short Hebrew brief) / dispatch help. The human, not the agent,
+  pulls the trigger.
 - A human owns the red case from there. The agent does not treat or close it.
 
 ### 4.6 Unreached recovery (resilience)

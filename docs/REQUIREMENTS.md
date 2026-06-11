@@ -35,7 +35,9 @@ The whole build optimizes these three. Every feature should map to at least one.
 - [ ] **MUST** trigger a run via `POST /events {playbook, polygon}`.
 - [ ] **MUST** find **opted-in** people inside the polygon (point-in-polygon).
 - [ ] **MUST** launch **parallel** outbound AI voice calls (not sequential).
-- [ ] **MUST** triage every answer into `OK 🟢 | NEEDS_HELP 🟡 | DISTRESS 🔴 | UNREACHED ⚫`.
+- [ ] **MUST** each call open as **emotional support** (calm, caring, human) — the
+      supportive conversation is the instrument that **gathers the data**.
+- [ ] **MUST** capture every answer as a status `OK 🟢 | NEEDS_HELP 🟡 | DISTRESS 🔴 | UNREACHED ⚫`.
 - [ ] **MUST** render a **live ops map** (Leaflet) that polls status every 2s.
 - [ ] **MUST** be **crisis-agnostic**: everything crisis-specific lives in YAML
       playbooks — a new crisis is a new playbook, **not new code**.
@@ -58,8 +60,8 @@ Dial is the spine. Aim to exercise all five; the first three are MUST.
       **Verified payloads + field names: `docs/DIAL.md` (the plan's guesses were wrong).**
 - [ ] **MUST** Outbound + inbound SMS — UNREACHED fallback ("reply 1 = OK, 2 =
       help"); inbound replies drive triage.
-- [ ] **SHOULD** Outbound voice (escalation) — DISTRESS → automatic call to the
-      person's emergency contact with a short Hebrew brief.
+- [ ] **SHOULD** Outbound voice (escalation) — DISTRESS → the operator escalates
+      with **one click** to call the person's emergency contact (short Hebrew brief).
 - [ ] **SHOULD** Inbound voice — a resident can call the Aftercall number back.
 
 ### Resilience the judges look for
@@ -120,7 +122,7 @@ call_results(id, event_id, person_id, status, attempt, transcript_summary, updat
 An AI assistant should confirm ALL of these before claiming a task is done:
 
 1. Does this still call **only opted-in** people? (§TOS)
-2. Does the agent still **only triage/connect**, never treat? (§TOS iron rule)
+2. Does the agent **comfort + gather data without clinical treatment**, and does every distress case still reach a human? (§TOS iron rule)
 3. Did I keep the **frozen contract** and status line exactly? (§5)
 4. Did I avoid committing any real key? (§6, TOS)
 5. Does this map to at least one **judging axis**? (§1)

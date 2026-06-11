@@ -25,8 +25,9 @@ before anything is wired together. Integration is then just deleting mocks.
 ## Rules every role must honor (competition + ethics)
 
 - **Opt-in only** — never call anyone not flagged `opted_in`.
-- **Iron rule** — the agent triages and connects, never treats/diagnoses; every
-  🔴 DISTRESS case reaches a human (emergency contact called + operator alerted).
+- **Iron rule** — the agent offers emotional support but never clinically
+  treats/diagnoses; every 🔴 DISTRESS case reaches a human via **one-click operator
+  escalation** (emergency contact called + help dispatched).
 - **Dial is the spine, not a single API call** — judging axis 2 wants depth
   across the 5 primitives (outbound triage, escalation calls, in/outbound SMS,
   inbound voice, webhooks).
