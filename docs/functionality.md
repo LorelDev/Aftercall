@@ -1,15 +1,20 @@
 # Aftercall — Functionality Spec
 
-> **One-line pitch:** Aftercall is an AI that gathers real-time situational data
-> after a crisis at population scale — reaching each person as a calm, caring voice
-> and turning every supportive conversation into live awareness for the authority.
+> **One-line pitch:** Aftercall is a 24/7 AI support line — it reaches out to a
+> whole population after a crisis *and is always reachable in return* — turning
+> every calm, caring conversation into real support for the person and live
+> situational awareness for the authority.
 
-**What it does, in one breath:** after any disaster, Aftercall fires thousands of
-*parallel outbound AI voice calls* to an opted-in population inside a map polygon.
-Each call reaches the person as **emotional support** — a calm voice that asks how
-they are and reassures them — and that very conversation is the instrument that
-**collects the data**: every answer becomes a status (OK / needs help / distress)
-plus a one-line summary, aggregated into a live operations map for the authority.
+**What it does, in one breath:** Aftercall is a support line that works in **both
+directions**. It **reaches out** — after any disaster, firing thousands of
+*parallel outbound AI voice calls* to an opted-in population inside a map polygon —
+and it is **always reachable**, so anyone in distress can **call or text the
+Aftercall number any hour and a calm voice answers in seconds** (the door that's
+never busy — the inversion of the jammed hotline). Either way, each conversation
+reaches the person as **emotional support** — a calm voice that asks how they are
+and reassures them — and that very conversation is the instrument that **collects
+the data**: every answer becomes a status (OK / needs help / distress) plus a
+one-line summary, aggregated into a live operations map for the authority.
 The support is what gets people to answer and open up; the gathered data is what
 saves the response — **the first hour after any crisis, at infinite scale.**
 
@@ -24,8 +29,10 @@ see [`TASKS.md`](TASKS.md); for judging strategy see [`hackathon.md`](hackathon.
 
 These are not safety footnotes — they are the product.
 
-1. **Opt-in participation.** Aftercall only ever contacts people who have
-   explicitly opted in (`people.opted_in`). No cold outreach, ever.
+1. **Opt-in participation.** Aftercall only ever *reaches out* to people who have
+   explicitly opted in (`people.opted_in`). No cold outreach, ever. The **inbound
+   line is open to all by design**: anyone may **call or text in** for support —
+   reaching in is itself consent, and never requires a prior opt-in.
 2. **Privacy by design.** Only one-line summaries of calls are stored
    (`transcript_summary`), never full transcripts. Personal data stays in the
    local DB and is shared with no third party beyond what Dial/Stripe need to
@@ -48,7 +55,7 @@ These are not safety footnotes — they are the product.
 | Actor | Role |
 |---|---|
 | **Authority / NGO operator** | triggers an event, watches the ops map, takes over red cases. Pays the readiness subscription + metered usage. |
-| **Resident (opted-in citizen)** | receives the AI voice call / SMS, answers status, may receive a relief micro-grant. |
+| **Resident (citizen)** | receives the AI voice call / SMS — or **calls/texts the Aftercall line themselves, any hour** — answers status, may receive a relief micro-grant. |
 | **Emergency contact** | a resident's pre-listed contact, auto-called when that resident is in distress. |
 | **AI voice agent (Dial)** | conducts each call as a calm, supportive conversation from a per-person system prompt; gathers the person's status and ends with the status line. Offers comfort, never clinical treatment. |
 | **Human responder** | the person the operator dispatches once a red case is surfaced. |
@@ -57,6 +64,10 @@ These are not safety footnotes — they are the product.
 
 ## 3. End-to-end functional flow
 
+A conversation can start **two ways** — both converge on the same status model,
+ops map, and escalation.
+
+**A) Aftercall reaches out** (outbound, population scale):
 ```
 Operator triggers an event (playbook + map polygon)
   → Aftercall loads the crisis playbook (YAML) and finds opted-in residents in the polygon
@@ -65,6 +76,19 @@ Operator triggers an event (playbook + map polygon)
   → Dial streams events back via webhook:
       call.ended         → fetch transcript → classify → save status → escalate if needed
       message.received   → inbound SMS reply drives status ("1"=OK, "2"=NEEDS_HELP) / grant confirm
+```
+
+**B) A person reaches in** (inbound, always-on 24/7 — no opt-in required):
+```
+Resident calls or texts the Aftercall number, any hour
+  → the same calm AI agent answers in seconds and offers support
+    → derives STATUS=<OK|NEEDS_HELP|DISTRESS> | SUMMARY=<one line>
+    → DISTRESS → alert operator → one-click human escalation (same path as outbound)
+  → the contact lands on the same ops map + status model
+```
+
+Both paths then resolve identically:
+```
   → each resident lands in one status:
       OK 🟢   |   NEEDS_HELP 🟡   |   DISTRESS 🔴   |   UNREACHED ⚫
       DISTRESS  → alert operator → one-click escalation (emergency contact / dispatch help)
@@ -128,10 +152,23 @@ Operator triggers an event (playbook + map polygon)
 - Inbound `message.received` with `body` `1`/`2` updates the resident's status —
   closing the loop for people who can't take a call.
 
-### 4.7 Inbound channels
-- **Inbound SMS:** residents reply to drive their own status / confirm a grant.
-- **Inbound voice:** a resident can call the Aftercall number back to reach their
-  status or a human operator.
+### 4.7 Always-on inbound support line (24/7) — the door that's never busy
+The first-class counterpart to the outbound fan-out: Aftercall is **always
+reachable**, so a person in distress never gets hold music. This is the hard
+inversion of the jammed hotline — **someone always picks up.**
+- **Inbound voice:** anyone can **call the Aftercall number any hour** and the same
+  calm AI support agent answers in seconds — listens, reassures, and derives their
+  status exactly like an outbound call. No opt-in required to reach in.
+- **Inbound SMS:** anyone can **text the number** and get an immediate supportive
+  reply; residents also reply to drive their own status ("1"=OK, "2"=needs help)
+  or confirm a grant.
+- **Same triage, same map, same escalation:** an inbound conversation produces the
+  same `STATUS=… | SUMMARY=…` line, lands on the same ops map, and a `DISTRESS`
+  result raises the same **one-click human escalation** (4.5). Reaching in and being
+  reached out to converge on one status model.
+- **Always-on, not event-gated:** the inbound line answers around the clock, not
+  only during an operator-triggered event — so support exists in the quiet hours
+  before and after any activation.
 
 ### 4.8 Live operations map (situational awareness)
 - Single-file Leaflet dashboard. Operator **draws the polygon**, fires the event,
@@ -164,9 +201,11 @@ events(id, playbook_id, polygon, started_at, status)
 call_results(id, event_id, person_id, status, attempt,
              transcript_summary, updated_at)
 ```
-- **Correlation:** the Dial webhook has no `metadata`, so Aftercall stores a
-  `callId → person_id` map at call-placement time to tie each result back to a
-  person (see `DIAL.md`).
+- **Correlation:** the Dial webhook has no `metadata`, so for **outbound** calls
+  Aftercall stores a `callId → person_id` map at call-placement time to tie each
+  result back to a person (see `DIAL.md`). For **inbound** calls/SMS there is no
+  placement step, so correlation is by **caller phone number** lookup against
+  `people.phone` (an unknown number is handled as an anonymous support contact).
 
 ## 6. Public interface (frozen contract)
 
@@ -187,6 +226,7 @@ call_results(id, event_id, person_id, status, attempt,
 
 - No diagnosis, triage advice, or treatment by the AI.
 - No automatic closing of red cases.
-- No contact with anyone not opted in.
+- No *outbound* contact with anyone not opted in. (The inbound line is open to
+  all — but Aftercall never initiates contact with someone who hasn't opted in.)
 - No storage of full transcripts.
 - No real-money Stripe flows during the hackathon (test mode only).

@@ -12,5 +12,12 @@ __pycache__/
 .venv/
 venv/
 
+# next.js / node (web app, now at repo root)
+/node_modules/
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
 # os
 .DS_Store
