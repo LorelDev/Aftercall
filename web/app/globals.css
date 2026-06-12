@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  /* warm-neutral charcoal — deliberately NOT navy-blue (the generic AI combo) */
+  --color-ink: #0a0a0b;
+  --color-ink2: #100f11;
+  --color-panel: #16151a;
+  --color-inset: #0d0c0f;
+  --color-line: #232228;
+  --color-line2: #322f38;
+  --color-fg: #f1efe9;
+  --color-mut: #a29e98;
+  --color-faint: #6a6660;
+  /* single refined accent + semantic status trio */
+  --color-pulse: #34d07d;
+  --color-amber: #e8b13a;
+  --color-red: #f25563;
+  --color-gray2: #7a756e;
+  --color-blue: #5b8def;
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+.font-mono2 {
+  font-family: var(--font-mono2), monospace;
+}
+
+/* film grain — fixed + pointer-events-none so it never repaints on scroll */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+
+/* materiality WITHOUT glow: 1px inner light edge + tinted dark shadow (design-taste anti-tell) */
+.edge {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.lift {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 22px 50px -26px rgba(0, 0, 0, 0.9);
+}
+.glass {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* hairline rule used as an editorial divider */
+.rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line2), transparent);
+}
+
+/* ---------- marquee ---------- */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+.marquee-track { animation: marquee 40s linear infinite; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(52, 208, 125, 0.4); }
+  70% { box-shadow: 0 0 0 11px rgba(52, 208, 125, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 208, 125, 0); }
+}
+.pulse-ring { animation: pulse-ring 2s infinite; }
+
+@keyframes ellipsis {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "…"; }
+}
+.ell::after { content: "…"; animation: ellipsis 1.4s steps(4) infinite; }
+
+/* reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+.bdot { opacity: 0.12; transition: opacity 0.8s ease; }
+.reveal.in .bdot { opacity: 0.8; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.d1 { animation-delay: 0.08s; }
+.d2 { animation-delay: 0.16s; }
+.d3 { animation-delay: 0.26s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .fade-up, .marquee-track, .pulse-ring {
+    animation: none !important;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- map ---------- */
+.mdot {
+  display: block; width: 16px; height: 16px; border-radius: 50%;
+  border: 2.5px solid var(--color-ink);
+}
+.mdot.PENDING { animation: pulse-ring 1.5s infinite; }
+.leaflet-container { font-family: inherit; background: #0c0c0d; }
+.leaflet-tile { filter: brightness(0.6) contrast(1.06) saturate(0.5) hue-rotate(8deg); }
+.leaflet-popup-content-wrapper {
+  background: var(--color-panel); color: var(--color-fg);
+  border: 1px solid var(--color-line2); border-radius: 10px;
+}
+.leaflet-popup-tip { background: var(--color-panel); }
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: var(--color-line2); border-radius: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+:focus-visible {
+  outline: 2px solid var(--color-pulse);
+  outline-offset: 2px;
+}

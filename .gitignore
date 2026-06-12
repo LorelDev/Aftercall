@@ -1,0 +1,16 @@
+# secrets — never commit (docs/TOS.md §3)
+.env
+backend/.env
+
+# local db / artifacts
+*.db
+backend/aftercall.db
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os
+.DS_Store

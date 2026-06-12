@@ -1,0 +1,19 @@
+{
+  "event_id": 1,
+  "playbook_id": "rocket_alert",
+  "counters": {"OK": 18, "NEEDS_HELP": 4, "DISTRESS": 2, "UNREACHED": 6, "PENDING": 0, "total": 30},
+  "people": [
+    {"person_id": 1,  "name": "דנה לוי",     "lat": 32.0700, "lng": 34.7800, "status": "OK"},
+    {"person_id": 2,  "name": "יוסי כהן",    "lat": 32.0720, "lng": 34.7750, "status": "DISTRESS"},
+    {"person_id": 3,  "name": "מרים פרץ",    "lat": 32.0680, "lng": 34.7820, "status": "OK"},
+    {"person_id": 4,  "name": "אבי מזרחי",   "lat": 32.0750, "lng": 34.7790, "status": "OK"},
+    {"person_id": 5,  "name": "נועה אדרי",   "lat": 32.0660, "lng": 34.7770, "status": "NEEDS_HELP"},
+    {"person_id": 6,  "name": "איתי שמש",    "lat": 32.0710, "lng": 34.7810, "status": "OK"},
+    {"person_id": 7,  "name": "רונית גבאי",  "lat": 32.0690, "lng": 34.7760, "status": "UNREACHED"},
+    {"person_id": 8,  "name": "עומר בן דוד", "lat": 32.0730, "lng": 34.7800, "status": "OK"},
+    {"person_id": 9,  "name": "שירה אזולאי", "lat": 32.0670, "lng": 34.7790, "status": "OK"},
+    {"person_id": 10, "name": "תומר ביטון",  "lat": 32.0740, "lng": 34.7760, "status": "NEEDS_HELP"},
+    {"person_id": 16, "name": "אלון רוזן",   "lat": 32.0675, "lng": 34.7795, "status": "DISTRESS"},
+    {"person_id": 25, "name": "אסף ברק",     "lat": 32.0678, "lng": 34.7778, "status": "UNREACHED"}
+  ]
+}

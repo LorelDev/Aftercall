@@ -1,0 +1,18 @@
+{
+  "id": "evt_01HWFIXTURE0001",
+  "object": "event",
+  "type": "call.ended",
+  "version": "1",
+  "createdAt": "2026-06-12T07:15:00Z",
+  "relatedObject": "call",
+  "data": {
+    "callId": "call_01HWFIXTURE0001",
+    "from": "+972500000999",
+    "to": "+972500000001",
+    "direction": "outbound",
+    "durationSeconds": 47,
+    "status": "completed",
+    "canceled": false,
+    "transcriptAvailable": true
+  }
+}

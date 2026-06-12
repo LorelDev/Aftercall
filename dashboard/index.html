@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aftercall — מפת מבצע חי</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <style>
+    :root{
+      --bg:#0b0f17; --panel:#121826; --line:#1f2937; --txt:#e5edff; --muted:#8aa0c0;
+      --ok:#22c55e; --help:#eab308; --distress:#ef4444; --unreached:#64748b; --pending:#3b82f6;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--txt)}
+    #app{display:grid;grid-template-columns:340px 1fr;height:100vh}
+    #side{background:var(--panel);border-inline-end:1px solid var(--line);padding:18px;overflow:auto}
+    h1{font-size:20px;margin:0 0 2px}
+    .sub{color:var(--muted);font-size:12px;margin-bottom:16px}
+    #map{height:100vh}
+    .row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    select,button,input{background:#0e1422;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;width:100%}
+    button{cursor:pointer;font-weight:600}
+    button.primary{background:#1d4ed8;border-color:#1d4ed8}
+    button.primary:hover{background:#2563eb}
+    .hint{font-size:12px;color:var(--muted);margin:6px 0 16px}
+    .counters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+    .c{background:#0e1422;border:1px solid var(--line);border-radius:10px;padding:10px}
+    .c .n{font-size:24px;font-weight:700}
+    .c .l{font-size:12px;color:var(--muted)}
+    .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
+    .ok{color:var(--ok)} .help{color:var(--help)} .distress{color:var(--distress)}
+    .unreached{color:var(--unreached)} .pending{color:var(--pending)}
+    .bg-ok{background:var(--ok)} .bg-help{background:var(--help)} .bg-distress{background:var(--distress)}
+    .bg-unreached{background:var(--unreached)} .bg-pending{background:var(--pending)}
+    .section{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+    .alert{background:#2a1414;border:1px solid #5b1d1d;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px}
+    .invoice{font-size:13px;color:var(--muted);line-height:1.7}
+    .invoice b{color:var(--txt)}
+    .pool{height:8px;background:#0e1422;border-radius:6px;overflow:hidden;margin-top:6px;border:1px solid var(--line)}
+    .pool > div{height:100%;background:var(--ok);transition:width .4s}
+    .legend{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+    .status-pill{font-size:11px;padding:1px 7px;border-radius:20px;color:#0b0f17;font-weight:700}
+    code{background:#0e1422;border:1px solid var(--line);border-radius:6px;padding:1px 5px;font-size:12px}
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="side">
+    <h1>Aftercall</h1>
+    <div class="sub">השעה הראשונה אחרי כל משבר — בקנה מידה אינסופי</div>
+
+    <div class="row"><select id="playbook"></select></div>
+    <div class="row"><button id="draw" class="primary">✏️ צייר/י פוליגון</button></div>
+    <div class="row"><button id="fire" class="primary">🚀 הפעל אירוע</button></div>
+    <div class="hint">צייר/י מצולע על המפה, בחר/י פלייבוק, והפעל/י. נקודות יתחילו להבהב לפי הסטטוס.</div>
+
+    <div class="counters" id="counters"></div>
+
+    <div class="section">
+      <div style="font-weight:700;margin-bottom:8px">💸 מי משלם (Stripe)</div>
+      <div class="invoice" id="invoice">—</div>
+      <div style="font-weight:700;margin:12px 0 4px">קרן סיוע</div>
+      <div class="invoice" id="poolText">—</div>
+      <div class="pool"><div id="poolBar" style="width:100%"></div></div>
+    </div>
+
+    <div class="section">
+      <div style="font-weight:700;margin-bottom:8px">🔴 התראות למוקדן אנושי</div>
+      <div id="alerts"><div class="invoice">אין התראות.</div></div>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot bg-ok"></span>בסדר</span>
+      <span><span class="dot bg-help"></span>זקוק/ה</span>
+      <span><span class="dot bg-distress"></span>מצוקה</span>
+      <span><span class="dot bg-unreached"></span>לא נענה</span>
+      <span><span class="dot bg-pending"></span>בהמתנה</span>
+    </div>
+  </div>
+  <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script>
+// One-line flip from fixture to live backend:
+const API_BASE = location.search.includes("fixture") ? null : "http://localhost:8000";
+const FIXTURE_URL = "../fixtures/status.json";
+
+const COLORS = {OK:"#22c55e", NEEDS_HELP:"#eab308", DISTRESS:"#ef4444", UNREACHED:"#64748b", PENDING:"#3b82f6"};
+const CLASS  = {OK:"bg-ok", NEEDS_HELP:"bg-help", DISTRESS:"bg-distress", UNREACHED:"bg-unreached", PENDING:"bg-pending"};
+const LABELS = {OK:"בסדר", NEEDS_HELP:"זקוק/ה לעזרה", DISTRESS:"מצוקה", UNREACHED:"לא נענה", PENDING:"בהמתנה", total:"סה\"כ"};
+
+const map = L.map("map").setView([32.0700, 34.7800], 15);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {attribution:"© OpenStreetMap", maxZoom:19}).addTo(map);
+
+const drawn = new L.FeatureGroup().addTo(map);
+let currentPolygon = null;
+let eventId = null;
+let markers = {};
+
+// --- drawing ---
+const drawer = new L.Draw.Polygon(map, {shapeOptions:{color:"#1d4ed8"}});
+document.getElementById("draw").onclick = () => drawer.enable();
+map.on(L.Draw.Event.CREATED, e => {
+  drawn.clearLayers();
+  drawn.addLayer(e.layer);
+  currentPolygon = e.layer.getLatLngs()[0].map(p => [p.lat, p.lng]);
+});
+
+// --- playbooks ---
+async function loadPlaybooks(){
+  const sel = document.getElementById("playbook");
+  if(!API_BASE){ sel.innerHTML = '<option value="rocket_alert">rocket_alert</option><option value="earthquake">earthquake</option>'; return; }
+  try{
+    const r = await fetch(`${API_BASE}/playbooks`);
+    const j = await r.json();
+    sel.innerHTML = j.playbooks.map(p=>`<option value="${p}">${p}</option>`).join("");
+  }catch(e){ sel.innerHTML = '<option value="rocket_alert">rocket_alert</option>'; }
+}
+
+// --- fire event ---
+document.getElementById("fire").onclick = async () => {
+  if(!API_BASE){ alert("מצב פיקסצ'ר — הצג נתונים סטטיים בלבד. הסר ?fixture כדי לחבר לשרת."); return; }
+  if(!currentPolygon){ alert("צייר/י פוליגון קודם."); return; }
+  const playbook = document.getElementById("playbook").value;
+  const r = await fetch(`${API_BASE}/events`, {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({playbook, polygon: currentPolygon})
+  });
+  const j = await r.json();
+  eventId = j.event_id;
+  L.polygon(currentPolygon, {color:"#1d4ed8", weight:2, fillOpacity:0.05}).addTo(map);
+};
+
+// --- polling ---
+function dotIcon(status){
+  return L.divIcon({className:"", html:`<span class="dot ${CLASS[status]||'bg-pending'}" style="width:16px;height:16px;box-shadow:0 0 10px ${COLORS[status]||'#3b82f6'}"></span>`, iconSize:[16,16]});
+}
+function render(data){
+  // markers
+  (data.people||[]).forEach(p=>{
+    const key = p.person_id;
+    if(markers[key]){ markers[key].setIcon(dotIcon(p.status)); }
+    else{
+      markers[key] = L.marker([p.lat,p.lng],{icon:dotIcon(p.status)}).addTo(map);
+    }
+    markers[key].bindPopup(`<b>${p.name}</b><br><span class="status-pill" style="background:${COLORS[p.status]}">${LABELS[p.status]||p.status}</span><br><small>${p.summary||""}</small>`);
+  });
+  // counters
+  const c = data.counters||{};
+  const order = ["OK","NEEDS_HELP","DISTRESS","UNREACHED","PENDING","total"];
+  document.getElementById("counters").innerHTML = order.filter(k=>k in c).map(k=>
+    `<div class="c"><div class="n" style="color:${COLORS[k]||'#e5edff'}">${c[k]}</div><div class="l">${LABELS[k]||k}</div></div>`
+  ).join("");
+  // invoice
+  if(data.invoice){
+    const inv = data.invoice;
+    document.getElementById("invoice").innerHTML =
+      `נמסר ל-<b>${inv.persons_reached}</b> אנשים · ₪${(inv.unit_price_cents/100).toFixed(2)} לאדם<br>חשבונית רצה: <b>₪${(inv.amount_cents/100).toFixed(2)}</b>`;
+  }
+  // pool
+  if(data.relief_pool){
+    const pool = data.relief_pool;
+    const pct = pool.pool_cents ? Math.max(0, pool.remaining_cents/pool.pool_cents*100) : 100;
+    document.getElementById("poolText").innerHTML =
+      `נותר <b>₪${(pool.remaining_cents/100).toFixed(0)}</b> מתוך ₪${(pool.pool_cents/100).toFixed(0)} · חולק ₪${(pool.disbursed_cents/100).toFixed(0)}`;
+    document.getElementById("poolBar").style.width = pct+"%";
+  }
+  // alerts
+  const alerts = data.alerts||[];
+  document.getElementById("alerts").innerHTML = alerts.length
+    ? alerts.slice().reverse().map(a=>`<div class="alert">🔴 <b>${a.name}</b> — ${a.message}</div>`).join("")
+    : '<div class="invoice">אין התראות.</div>';
+}
+
+async function poll(){
+  try{
+    let data;
+    if(!API_BASE){ data = await (await fetch(FIXTURE_URL)).json(); }
+    else if(eventId){ data = await (await fetch(`${API_BASE}/events/${eventId}/status`)).json(); }
+    else { return; }
+    render(data);
+  }catch(e){ /* keep polling */ }
+}
+
+loadPlaybooks();
+if(!API_BASE){ poll(); }       // fixture mode: render once
+setInterval(poll, 2000);        // live mode: every 2s
+</script>
+</body>
+</html>

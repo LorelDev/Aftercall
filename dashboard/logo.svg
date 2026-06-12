@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="בסדר — Beseder">
+  <!-- a pulse line that resolves into a checkmark: sign of life -> OK -->
+  <path d="M7 40h11l6-10 8 18 18-32" fill="none" stroke="#2dd576" stroke-width="6.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

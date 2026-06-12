@@ -1,0 +1,16 @@
+{
+  "id": "evt_01HWFIXTURE0002",
+  "object": "event",
+  "type": "message.received",
+  "version": "1",
+  "createdAt": "2026-06-12T07:20:00Z",
+  "relatedObject": "message",
+  "data": {
+    "messageId": "msg_01HWFIXTURE0002",
+    "from": "+972500000010",
+    "to": "+972500000999",
+    "channel": "sms",
+    "body": "1",
+    "source": "external"
+  }
+}
