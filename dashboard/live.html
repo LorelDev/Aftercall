@@ -11,20 +11,20 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b0f17; --bg2:#0e131e; --panel:#101725; --inset:#0a0f1a; --line:#1c2536; --line2:#27324a;
+      --bg:#0a0e1a; --bg2:#0d1222; --panel:#0f1428; --inset:#0b0f20; --line:#1c2540; --line2:#263050;
     }
     /* palette */
     :root{
-      --txt:#e9eefb; --muted:#8b9ab8; --faint:#5d6c8a;
-      --ok:#2dd576; --help:#f5b324; --distress:#ff4d5e; --unreached:#6b7a94; --pending:#4d8dff;
-      --accent:#7c6bff; --accent2:#4d8dff;
+      --txt:#dde8f5; --muted:#8fa8c8; --faint:#566888;
+      --ok:#4da8ff; --help:#60c4ff; --distress:#7db8e8; --unreached:#4d7aaa; --pending:#5b9eff;
+      --accent:#4da8ff; --accent2:#5b9eff;
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
       font-family:"IBM Plex Sans Hebrew",system-ui,-apple-system,sans-serif;font-size:14px}
     body{background:
-      radial-gradient(1100px 500px at 85% -10%, rgba(124,107,255,.08), transparent 60%),
-      radial-gradient(900px 600px at -10% 110%, rgba(77,141,255,.06), transparent 55%),
+      radial-gradient(1100px 500px at 85% -10%, rgba(77,168,255,.08), transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, rgba(91,158,255,.06), transparent 55%),
       var(--bg)}
     .mono{font-family:"IBM Plex Mono",monospace}
     ::-webkit-scrollbar{width:9px;height:9px}
@@ -207,7 +207,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const API_BASE = "http://localhost:8000";
-const COLORS = {OK:"#2dd576",NEEDS_HELP:"#f5b324",DISTRESS:"#ff4d5e",UNREACHED:"#6b7a94",PENDING:"#4d8dff"};
+const COLORS = {OK:"#4da8ff",NEEDS_HELP:"#60c4ff",DISTRESS:"#7db8e8",UNREACHED:"#4d7aaa",PENDING:"#5b9eff"};
 const LABELS = {OK:"בסדר",NEEDS_HELP:"זקוק/ה לעזרה",DISTRESS:"מצוקה",UNREACHED:"לא נענה",PENDING:"מתקשר…",total:'סה"כ'};
 
 const map = L.map("map",{zoomControl:false}).setView([32.0700,34.7800],15);

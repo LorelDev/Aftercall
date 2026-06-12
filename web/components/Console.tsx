@@ -16,11 +16,11 @@ import Logo from "@/components/Logo";
 const API = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
 
 const COLORS: Record<string, string> = {
-  OK: "#2dd576",
-  NEEDS_HELP: "#f5b324",
-  DISTRESS: "#ff4d5e",
-  UNREACHED: "#6b7a94",
-  PENDING: "#4d8dff",
+  OK: "#4da8ff",
+  NEEDS_HELP: "#60c4ff",
+  DISTRESS: "#7db8e8",
+  UNREACHED: "#4d7aaa",
+  PENDING: "#5b9eff",
 };
 const LABELS: Record<string, string> = {
   OK: "בסדר",
@@ -94,7 +94,7 @@ function Transcript({ p, open, onToggle }: { p: Person; open: boolean; onToggle:
                 key={i}
                 className={`max-w-[92%] rounded-xl px-2.5 py-1.5 text-xs leading-relaxed ${
                   agent
-                    ? "self-start rounded-ss-sm border border-blue/25 bg-blue/10"
+                    ? "self-start rounded-ss-sm border border-pulse/25 bg-pulse/10"
                     : "self-end rounded-se-sm border border-pulse/20 bg-pulse/10"
                 }`}
               >
@@ -501,7 +501,7 @@ export default function Console() {
                 <div
                   key={p.person_id}
                   className={`relative py-3 ps-3.5 transition-colors hover:bg-ink2/60 ${
-                    p.status === "DISTRESS" ? "bg-red/5" : ""
+                    p.status === "DISTRESS" ? "bg-pulse/5" : ""
                   }`}
                 >
                   <span

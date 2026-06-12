@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
   <style>
     :root{
-      --bg:#0b0f17; --panel:#121826; --line:#1f2937; --txt:#e5edff; --muted:#8aa0c0;
-      --ok:#22c55e; --help:#eab308; --distress:#ef4444; --unreached:#64748b; --pending:#3b82f6;
+      --bg:#0a0e1a; --panel:#0f1428; --line:#1c2540; --txt:#dde8f5; --muted:#8fa8c8;
+      --ok:#4da8ff; --help:#60c4ff; --distress:#7db8e8; --unreached:#4d7aaa; --pending:#5b9eff;
     }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--txt)}
@@ -88,7 +88,7 @@
 const API_BASE = location.search.includes("fixture") ? null : "http://localhost:8000";
 const FIXTURE_URL = "../fixtures/status.json";
 
-const COLORS = {OK:"#22c55e", NEEDS_HELP:"#eab308", DISTRESS:"#ef4444", UNREACHED:"#64748b", PENDING:"#3b82f6"};
+const COLORS = {OK:"#4da8ff", NEEDS_HELP:"#60c4ff", DISTRESS:"#7db8e8", UNREACHED:"#4d7aaa", PENDING:"#5b9eff"};
 const CLASS  = {OK:"bg-ok", NEEDS_HELP:"bg-help", DISTRESS:"bg-distress", UNREACHED:"bg-unreached", PENDING:"bg-pending"};
 const LABELS = {OK:"בסדר", NEEDS_HELP:"זקוק/ה לעזרה", DISTRESS:"מצוקה", UNREACHED:"לא נענה", PENDING:"בהמתנה", total:"סה\"כ"};
 

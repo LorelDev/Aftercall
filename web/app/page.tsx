@@ -19,10 +19,10 @@ import Logo from "@/components/Logo";
 /* Live ops preview — the product is its own hero asset.               */
 /* ------------------------------------------------------------------ */
 const PREVIEW_ROWS = [
-  { name: "רחל אזולאי", status: "OK", label: "בסדר", c: "#34d07d", sum: "בטוחה בבית, הכל תקין" },
-  { name: "יוסי מרציאנו", status: "PENDING", label: "מתקשר", c: "#5b8def", sum: "" },
-  { name: "אבי שטרית", status: "NEEDS_HELP", label: "זקוק לעזרה", c: "#e8b13a", sum: "מבקש מים ותרופות, רחוב הגפן 12" },
-  { name: "מרים דהן", status: "OK", label: "בסדר", c: "#34d07d", sum: "במרחב מוגן עם הנכדים" },
+  { name: "רחל אזולאי", status: "OK", label: "בסדר", c: "#4da8ff", sum: "בטוחה בבית, הכל תקין" },
+  { name: "יוסי מרציאנו", status: "PENDING", label: "מתקשר", c: "#5b9eff", sum: "" },
+  { name: "אבי שטרית", status: "NEEDS_HELP", label: "זקוק לעזרה", c: "#60c4ff", sum: "מבקש מים ותרופות, רחוב הגפן 12" },
+  { name: "מרים דהן", status: "OK", label: "בסדר", c: "#4da8ff", sum: "במרחב מוגן עם הנכדים" },
 ];
 
 const LivePreview = memo(function LivePreview() {
@@ -48,9 +48,9 @@ const LivePreview = memo(function LivePreview() {
         </div>
         <div className="grid grid-cols-3 divide-x divide-x-reverse divide-line border-b border-line py-4 text-center">
           {[
-            { n: "183", l: "בסדר", c: "#34d07d" },
-            { n: "12", l: "זקוקים לעזרה", c: "#e8b13a" },
-            { n: "2", l: "מצוקה", c: "#f25563" },
+            { n: "183", l: "בסדר", c: "#4da8ff" },
+            { n: "12", l: "זקוקים לעזרה", c: "#60c4ff" },
+            { n: "2", l: "מצוקה", c: "#7db8e8" },
           ].map((s) => (
             <div key={s.l}>
               <div className="font-mono2 text-3xl font-semibold" style={{ color: s.c }}>{s.n}</div>
@@ -95,13 +95,13 @@ const BENTO = [
   {
     icon: Broadcast,
     title: "שיחות מקבילות, בלי תקרה",
-    body: "אירוע עם אלף תושבים הוא לא אלף שעות של שיחות — כולם מקבלים שיחה בו-זמנית, בעברית, בטון אנושי ורגוע.",
+    body: "אירוע עם אלף תושבים הוא לא אלף שעות של שיחות. כולם מקבלים שיחה בו-זמנית, בעברית, בטון אנושי ורגוע.",
     big: true,
   },
   {
     icon: HeartStraight,
     title: "תמיכה רגשית תוך כדי איסוף",
-    body: "שאלה אחת בכל פעם, הקשבה אמיתית — והמידע החיוני נאסף בדרך.",
+    body: "שאלה אחת בכל פעם, הקשבה אמיתית. והמידע החיוני נאסף בדרך.",
   },
   {
     icon: ShieldCheck,
@@ -116,12 +116,12 @@ const BENTO = [
   {
     icon: MapTrifold,
     title: "מפה חיה למוקדן",
-    body: "כל תושב הוא נקודה שמחליפה צבע בזמן אמת — וזזה לכתובת שנמסרה בשיחה.",
+    body: "כל תושב הוא נקודה שמחליפה צבע בזמן אמת. וזזה לכתובת שנמסרה בשיחה.",
   },
   {
     icon: FileText,
     title: "תמלול מלא, שמור",
-    body: "כל שיחה וכל SMS נשמרים — סיכום למבט מהיר, תמליל מלא כשצריך להעמיק.",
+    body: "כל שיחה וכל SMS נשמרים. סיכום למבט מהיר, תמליל מלא כשצריך להעמיק.",
   },
 ];
 
@@ -283,7 +283,7 @@ export default function Landing() {
                         key={d}
                         className="bdot aspect-square rounded-full"
                         style={{
-                          background: d % 9 === 4 ? "#e8b13a" : d % 13 === 7 ? "#5b8def" : "#34d07d",
+                          background: d % 9 === 4 ? "#60c4ff" : d % 13 === 7 ? "#5b9eff" : "#4da8ff",
                           transitionDelay: `${300 + d * 28}ms`,
                         }}
                       />
@@ -300,8 +300,8 @@ export default function Landing() {
       <section id="how" ref={scrubRef} className="border-y border-line bg-ink2">
         <div className="mx-auto flex max-w-5xl flex-col gap-16 px-5 py-32 md:py-48">
           <ScrubLine n="01" progress={scrollYProgress} range={[0, 0.33]} text="מזינים רשימת טלפונים ובוחרים תרחיש." />
-          <ScrubLine n="02" progress={scrollYProgress} range={[0.28, 0.62]} text='לחיצה אחת — ו"בסדר" מתקשר לכולם בו-זמנית.' />
-          <ScrubLine n="03" progress={scrollYProgress} range={[0.56, 0.92]} text="המפה מתמלאת ירוק, והמוקדן רואה רק את מי שצריך אותו." />
+          <ScrubLine n="02" progress={scrollYProgress} range={[0.28, 0.62]} text='לחיצה אחת, ו"בסדר" מתקשר לכולם בו-זמנית.' />
+          <ScrubLine n="03" progress={scrollYProgress} range={[0.56, 0.92]} text="המפה מתמלאת בכחול, והמוקדן רואה רק את מי שצריך אותו." />
         </div>
       </section>
 
@@ -310,8 +310,8 @@ export default function Landing() {
         <div className="grid gap-10 md:grid-cols-3 md:gap-0 md:divide-x md:divide-x-reverse md:divide-line">
           {[
             { t: "רק בהסכמה", b: "מתקשרים אך ורק למי שאישר מראש לקבל שיחות בחירום." },
-            { t: "מחבר, לא מטפל", b: "הסוכן בודק שלום ומחבר לאדם אנושי — לעולם לא מאבחן ולא נותן ייעוץ רפואי." },
-            { t: "ספק? מחמירים", b: "כשלא ברור — המערכת מסמנת לחומרה. אדום לעולם לא נסגר אוטומטית." },
+            { t: "מחבר, לא מטפל", b: "הסוכן בודק שלום ומחבר לאדם אנושי. לעולם לא מאבחן ולא נותן ייעוץ רפואי." },
+            { t: "ספק? מחמירים", b: "כשלא ברור, המערכת מסמנת לחומרה. אדום לעולם לא נסגר אוטומטית." },
           ].map((x, i) => (
             <div key={x.t} style={{ transitionDelay: `${i * 80}ms` }} className="reveal md:px-8">
               <div className="font-display text-xl font-extrabold text-pulse">{x.t}</div>
